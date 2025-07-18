@@ -1,7 +1,7 @@
 const canvas = document.getElementById("gameCanvas");
 const ctx = canvas.getContext("2d");
 
-let playerX = 275, playerY = 700;
+let playerX = 275, playerY = canvas.height - 80;
 let fairyX = 275, fairyY = 50;
 let score = 0;
 let gameOver = false;
@@ -16,7 +16,10 @@ const fairyImg = new Image();
 fairyImg.src = "Fata.jpeg";
 
 const playerImg = new Image();
-playerImg.src = "BallerinaCappuccina.jfif";
+playerImg.src = "Michele.webp";
+
+const retryMenu = document.getElementById("retry-menu");
+const retryButton = document.getElementById("retry-button");
 
 function rand(min, max) {
   return Math.random() * (max - min) + min;
@@ -33,7 +36,9 @@ function createBallerine() {
 }
 
 function drawImage(img, x, y) {
-  ctx.drawImage(img, x, y, 50, 50);
+  const imgWidth = 50;
+  const imgHeight = 50;
+  ctx.drawImage(img, x, y, imgWidth, imgHeight);
 }
 
 function drawText(text, x, y, size = 24, color = "black") {
@@ -76,21 +81,30 @@ function update() {
 }
 
 function draw() {
-  // Sfondo
   ctx.fillStyle = "#87CEEB"; // celeste
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (gameOver) {
     ctx.fillStyle = "black";
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawText("Game Over! Punteggio: " + score, 80, 400, 36, "white");
+    drawText("Game Over! Punteggio: " + score, 80, 300, 36, "white");
+    drawText("Le ballerine ti hanno posseduto hai perso K-lemon!", 30, 350, 24, "white");
+
+    showRetryButton(); // Mostra il tasto di rigioco
     return;
   }
 
   if (victory) {
     ctx.fillStyle = "#006400"; // verde scuro
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    drawText("Vittoria! Punteggio: " + score, 120, 400, 36, "white");
+
+    // Messaggio di vittoria con punteggio
+    drawText("Vittoria! Punteggio: " + score, 120, 300, 36, "white");
+
+    // Aggiungi il messaggio extra
+    drawText("Hai scansato le 800 ballerine e conquistato K-lemon!", 30, 350, 24, "white");
+
+    showRetryButton(); // Mostra il tasto di rigioco
     return;
   }
 
@@ -98,7 +112,7 @@ function draw() {
   for (let b of ballerine) drawImage(ballerinaImg, b.x, b.y);
   drawImage(playerImg, playerX, playerY);
 
-  drawText("Punteggio: " + score, 10, 30);
+  drawText("Punteggio: " + score, 10, 40);
 }
 
 function gameLoop() {
@@ -120,6 +134,56 @@ function checkCollision(x1, y1, x2, y2) {
 window.addEventListener("keydown", (e) => keys[e.key] = true);
 window.addEventListener("keyup", (e) => keys[e.key] = false);
 
-// Avvia il gioco
-createBallerine();
-gameLoop();
+// Funzione per iniziare il gioco
+function startGame() {
+  document.getElementById("start-menu").style.display = "none"; // Nascondi il menu iniziale
+  document.getElementById("rules-menu").style.display = "block"; // Mostra il menu delle regole
+}
+
+// Funzione per avviare il gioco dopo le regole
+function startAfterRules() {
+  document.getElementById("rules-menu").style.display = "none";  // Nascondi il menu delle regole
+  createBallerine();  // Crea le ballerine per il gioco
+  gameLoop();  // Avvia il ciclo del gioco
+}
+
+// Funzione per rigiocare
+function resetGame() {
+  // Reset delle variabili
+  playerX = 275;
+  playerY = canvas.height - 80;
+  fairyX = 275;
+  fairyY = 50;
+  score = 0;
+  gameOver = false;
+  victory = false;
+  ballerine.length = 0; // Resetta le ballerine
+  createBallerine(); // Riconstruisci le ballerine
+  retryMenu.style.display = "none"; // Nascondi il tasto "Rigioca"
+  gameLoop(); // Ritorna al ciclo di gioco
+}
+
+// Funzione per visualizzare il tasto di rigioco
+function showRetryButton() {
+  retryMenu.style.display = "block"; // Mostra il tasto "Rigioca"
+}
+
+// Aggiungi l'event listener per il tasto di rigioco
+retryButton.addEventListener("click", resetGame);
+
+// Eventi per il menu iniziale
+document.getElementById("start-yes").addEventListener("click", startGame);
+// Event listener per il pulsante "800 ballerine"
+document.getElementById("start-no").addEventListener("click", () => {
+  // Mostra la finestra modale con l'immagine
+  document.getElementById("ballerina-modal").style.display = "flex";
+  document.getElementById("ballerina-img").src = "fotomontaggio.png";  // Imposta l'immagine
+});
+
+// Chiudi la finestra modale quando si clicca su "Chiudi"
+document.getElementById("close-ballerina-modal").addEventListener("click", () => {
+  document.getElementById("ballerina-modal").style.display = "none";  // Nascondi la finestra modale
+});
+
+// Eventi per il menu delle regole
+document.getElementById("start-ok").addEventListener("click", startAfterRules);

@@ -7,7 +7,44 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="gameCanvas" width="600" height="800"></canvas>
+  <!-- Menu iniziale -->
+  <div id="start-menu">
+    <h1>K-lemon o 800 ballerine?</h1>
+    <button id="start-yes">K lemon</button>
+    <button id="start-no">800 ballerine</button>
+  </div>
+
+  <!-- Menu regole -->
+  <div id="rules-menu" style="display: none;">
+    <h1>Regole del gioco</h1>
+    <p>1. Usa le frecce per spostarti a sinistra e a destra.</p>
+    <p>2. Devi evitare le ballerine che vogliono possederti.</p>
+    <p>3. Ogni ballerina vale x10.</p>
+    <p>4. Il gioco termina quando colpisci una ballerina o raggiungi 80 punti.</p>
+    <button id="start-ok">OK, inizia!</button>
+  </div>
+
+  <!-- Modal per visualizzare l'immagine -->
+<div id="ballerina-modal" style="display: none;">
+  <div id="ballerina-content">
+    <img id="ballerina-img" src="" alt="Ballerina" />
+    <button id="close-ballerina-modal">Chiudi</button>
+  </div>
+</div>
+
+<!-- Aggiungi questo blocco alla fine del body per il tasto di rigioco -->
+<div id="retry-menu" style="display: none;">
+  <h2>Vuoi rigiocare?</h2>
+  <button id="retry-button">Rigioca</button>
+</div>
+
+
+  <canvas id="gameCanvas" width="600" height="700"></canvas>
+
+  <div id="mobile-controls">
+    <button id="left-button">⬅️</button>
+    <button id="right-button">➡️</button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>
