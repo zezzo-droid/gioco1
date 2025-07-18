@@ -129,7 +129,7 @@ canvas {
 /* Tasto di rigioca */
 #retry-menu {
   position: absolute;
-  top: 70%; /* Posiziona il tasto al centro della finestra */
+  top: 60%; /* Posiziona il tasto al centro della finestra */
   left: 50%;
   transform: translate(-50%, -50%);
   display: none;

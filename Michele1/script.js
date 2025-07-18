@@ -25,36 +25,41 @@ function rand(min, max) {
   return Math.random() * (max - min) + min;
 }
 
+// Funzione per creare le ballerine con velocità controllata
 function createBallerine() {
+  ballerine.length = 0;  // Pulisce l'array delle ballerine
   for (let i = 0; i < 5; i++) {
     ballerine.push({
       x: Math.floor(Math.random() * 550),
       y: Math.floor(Math.random() * -800),
-      speed: rand(2, 5),
+      speed: rand(2, 5),  // La velocità è tra 2 e 5, la manteniamo costante per ogni partita
     });
   }
 }
 
+// Funzione per disegnare le immagini
 function drawImage(img, x, y) {
   const imgWidth = 50;
   const imgHeight = 50;
   ctx.drawImage(img, x, y, imgWidth, imgHeight);
 }
 
+// Funzione per disegnare il testo
 function drawText(text, x, y, size = 24, color = "black") {
   ctx.fillStyle = color;
   ctx.font = `${size}px Arial`;
   ctx.fillText(text, x, y);
 }
 
+// Funzione di aggiornamento del gioco
 function update() {
   if (gameOver || victory) return;
 
-  // Movimento giocatore
+  // Movimento del giocatore
   if (keys["ArrowLeft"] && playerX > 0) playerX -= 5;
   if (keys["ArrowRight"] && playerX < 550) playerX += 5;
 
-  // Movimento ballerine
+  // Movimento delle ballerine
   for (let b of ballerine) {
     b.y += b.speed;
     if (b.y > 800) {
@@ -68,20 +73,21 @@ function update() {
     }
   }
 
-  // Collisione con fata
+  // Collisione con la fata
   if (checkCollision(playerX, playerY, fairyX, fairyY)) {
     score += 10;
     victory = true;
   }
 
   // Vittoria per punteggio
-  if (score >= 10) {
+  if (score >= 80) {
     victory = true;
   }
 }
 
+// Funzione di disegno del gioco
 function draw() {
-  ctx.fillStyle = "#87CEEB"; // celeste
+  ctx.fillStyle = "#87CEEB"; // Celeste
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   if (gameOver) {
@@ -95,7 +101,7 @@ function draw() {
   }
 
   if (victory) {
-    ctx.fillStyle = "#006400"; // verde scuro
+    ctx.fillStyle = "#006400"; // Verde scuro
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Messaggio di vittoria con punteggio
@@ -115,12 +121,14 @@ function draw() {
   drawText("Punteggio: " + score, 10, 40);
 }
 
+// Ciclo del gioco
 function gameLoop() {
   update();
   draw();
   requestAnimationFrame(gameLoop);
 }
 
+// Funzione per il controllo delle collisioni
 function checkCollision(x1, y1, x2, y2) {
   return (
     x1 < x2 + 50 &&
@@ -130,7 +138,7 @@ function checkCollision(x1, y1, x2, y2) {
   );
 }
 
-// Input tastiera
+// Gestione dell'input da tastiera
 window.addEventListener("keydown", (e) => keys[e.key] = true);
 window.addEventListener("keyup", (e) => keys[e.key] = false);
 
@@ -158,7 +166,10 @@ function resetGame() {
   gameOver = false;
   victory = false;
   ballerine.length = 0; // Resetta le ballerine
-  createBallerine(); // Riconstruisci le ballerine
+
+  // Crea nuove ballerine con velocità controllata
+  createBallerine(); 
+
   retryMenu.style.display = "none"; // Nascondi il tasto "Rigioca"
   gameLoop(); // Ritorna al ciclo di gioco
 }
@@ -185,6 +196,7 @@ document.getElementById("close-ballerina-modal").addEventListener("click", () =>
   document.getElementById("ballerina-modal").style.display = "none";  // Nascondi la finestra modale
 });
 
+// Controlli per il movimento mobile
 const leftButton = document.getElementById("left-button");
 const rightButton = document.getElementById("right-button");
 
@@ -194,5 +206,5 @@ leftButton.addEventListener("touchend", () => keys["ArrowLeft"] = false);
 rightButton.addEventListener("touchstart", () => keys["ArrowRight"] = true);
 rightButton.addEventListener("touchend", () => keys["ArrowRight"] = false);
 
-// Eventi per il menu delle regole
+// Event listener per il menu delle regole
 document.getElementById("start-ok").addEventListener("click", startAfterRules);
