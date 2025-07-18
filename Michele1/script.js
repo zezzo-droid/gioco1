@@ -185,5 +185,14 @@ document.getElementById("close-ballerina-modal").addEventListener("click", () =>
   document.getElementById("ballerina-modal").style.display = "none";  // Nascondi la finestra modale
 });
 
+const leftButton = document.getElementById("left-button");
+const rightButton = document.getElementById("right-button");
+
+leftButton.addEventListener("touchstart", () => keys["ArrowLeft"] = true);
+leftButton.addEventListener("touchend", () => keys["ArrowLeft"] = false);
+
+rightButton.addEventListener("touchstart", () => keys["ArrowRight"] = true);
+rightButton.addEventListener("touchend", () => keys["ArrowRight"] = false);
+
 // Eventi per il menu delle regole
 document.getElementById("start-ok").addEventListener("click", startAfterRules);

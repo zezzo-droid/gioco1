@@ -50,15 +50,16 @@ canvas {
   display: block;
 }
 
-/* Controlli mobili */
 #mobile-controls {
   position: absolute;
   bottom: 20px;
-  right: calc(50% - 300px + 10px);
+  left: 50%;
+  transform: translateX(-50%); /* Centra i bottoni orizzontalmente */
   display: flex;
   gap: 10px;
   z-index: 10;
 }
+
 
 #mobile-controls button {
   width: 50px;
